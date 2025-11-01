@@ -12,29 +12,35 @@ import juiceImg from '@/assets/imgs/juice.png'
 import onionImg from '@/assets/imgs/onion_garlic.png'
 
 const categories = [
-  { name: 'Fast Food', image: fastFoodImg, unit: '10 items', bgColor: 'bg-green-100' },
-  { name: 'Apple', image: appleImg, unit: '13 items', bgColor: 'bg-yellow-100' },
-  { name: 'Cake', image: cakeImg, unit: '5 items', bgColor: 'bg-green-100' },
-  { name: 'Headphone', image: headphoneImg, unit: '21 items', bgColor: 'bg-yellow-100' },
-  { name: 'Kiwi', image: kiwiImg, unit: '9 items', bgColor: 'bg-green-100' },
-  { name: 'Orange', image: orangeImg, unit: '3 items', bgColor: 'bg-yellow-100' },
+  { name: 'Fast Food', image: fastFoodImg, productCount: '10 items', color: 'bg-green-100' },
+  { name: 'Apple', image: appleImg, productCount: '13 items', color: 'bg-yellow-100' },
+  { name: 'Cake', image: cakeImg, productCount: '5 items', color: 'bg-green-100' },
+  { name: 'Headphone', image: headphoneImg, productCount: '21 items', color: 'bg-yellow-100' },
+  { name: 'Kiwi', image: kiwiImg, productCount: '9 items', color: 'bg-green-100' },
+  { name: 'Orange', image: orangeImg, productCount: '3 items', color: 'bg-yellow-100' },
 ]
 
 const banners = [
   {
-    description: 'Everyday Fresh & Clean with Our Products',
+    title: 'Everyday Fresh & Clean with Our Products',
     image: vegetablesImg,
-    bgBannerColor: 'bg-yellow-100',
+    buttonColor: 'bg-emerald-500',
+    color: 'bg-yellow-100',
+    url: '',
   },
   {
-    description: 'Make your Breakfast Healthy and Easy',
+    title: 'Make your Breakfast Healthy and Easy',
     image: juiceImg,
-    bgBannerColor: 'bg-green-100',
+    buttonColor: 'bg-emerald-500',
+    color: 'bg-green-100',
+    url: '',
   },
   {
-    description: 'The best Organic Products Online',
+    title: 'The best Organic Products Online',
     image: onionImg,
-    bgBannerColor: 'bg-blue-100',
+    buttonColor: 'bg-emerald-500',
+    color: 'bg-blue-100',
+    url: '',
   },
 ]
 </script>
@@ -42,7 +48,7 @@ const banners = [
 <template>
   <main class="container mx-auto px-4 py-8 space-y-8">
     <!-- Categories -->
-    <section>
+    <section class="w-full mx-auto p-6">
       <h2 class="text-3xl font-semibold text-gray-900 mb-8">Categories</h2>
       <div class="flex space-x-4 overflow-x-auto scrollbar-hide py-2">
         <CategoryCard
@@ -50,22 +56,24 @@ const banners = [
           :key="index"
           :name="cat.name"
           :image="cat.image"
-          :unit="cat.unit"
-          :bgColor="cat.bgColor"
+          :productCount="cat.productCount"
+          :color="cat.color"
         />
       </div>
     </section>
 
     <!-- Featured Banner -->
-    <section>
+    <section class="w-full mx-auto p-6">
       <h2 class="text-3xl font-semibold text-gray-900 mb-8">Featured</h2>
       <div class="flex space-x-4 overflow-auto scrollbar-hide py-2">
         <BannerCard
           v-for="(banner, index) in banners"
           :key="index"
-          :description="banner.description"
+          :title="banner.title"
+          :buttonColor="banner.buttonColor"
           :image="banner.image"
-          :bgBannerColor="banner.bgBannerColor"
+          :color="banner.color"
+          :url="banner.url"
         />
       </div>
     </section>
