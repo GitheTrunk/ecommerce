@@ -36,11 +36,27 @@
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useProductStore } from '@/stores/productStore.vue'
 import productCard from '@/components/productCard.vue'
 import productPromotion from '@/components/productPromotion.vue'
 export default {
   name: 'HomeView',
   components: { productCard, productPromotion },
+  data() {
+    return { currentGroupName: 'Group All' }
+  },
+  computed: {
+    ...mapState(useProductStore, {
+      // promotions (no params)
+      promotions: 'getPromotions',
+
+      // categories by group
+      categoryList(store) {
+        return store.getCategoriesByGroup(this.currentGroupName)
+      },
+    }),
+  },
   props: {
     categories: {
       type: Array,
