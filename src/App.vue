@@ -5,7 +5,7 @@
     </div>
 
     <!-- Main app content -->
-    <router-view v-else :categories="categories" :promotions="promotions" />
+    <router-view v-else :groups="groups" :categories="categories" :promotions="promotions" />
   </div>
 </template>
 
@@ -16,12 +16,22 @@ export default {
   name: 'App',
   data() {
     return {
+      groups: [],
       categories: [],
       promotions: [],
       loading: true,
     }
   },
   methods: {
+    async fetchGroups() {
+      try {
+        const res = await axios.get('http://localhost:3000/api/groups')
+        this.groups = res.data
+        console.log('Groups loaded:', this.groups)
+      } catch (error) {
+        console.error('Error fetching groups:', error)
+      }
+    },
     async fetchCategories() {
       try {
         const res = await axios.get('http://localhost:3000/api/categories')
@@ -42,7 +52,7 @@ export default {
     },
     async initializeData() {
       this.loading = true
-      await Promise.all([this.fetchCategories(), this.fetchPromotions()])
+      await Promise.all([this.fetchGroups(), this.fetchCategories(), this.fetchPromotions()])
       this.loading = false
     },
   },

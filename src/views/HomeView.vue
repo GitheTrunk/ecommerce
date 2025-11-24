@@ -1,10 +1,13 @@
 <template>
-  <main class="container mx-auto px-4 py-8 space-y-8">
-    <!-- Categories -->
-    <section class="w-full mx-auto p-4 md:p-8">
-      <h2 class="text-4xl font-bold text-gray-900 mb-10 pb-3">Categories</h2>
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 md:gap-8">
+  <div class="w-full mx-auto min-h-screen">
+    <section class="w-full mx-auto md:p-8">
+      <MenuBar
+        NameMenu="Featured Categories"
+        :groups="storeGroups"
+        @group-selected="currentGroupName = $event"
+        class="mb-10"
+      />
+      <div class="flex overflow-x-auto space-x-4 pb-2 mb-10">
         <productCard
           v-for="category in categories"
           :key="category.id"
@@ -15,57 +18,70 @@
           class="transform transition duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl"
         />
       </div>
-    </section>
 
-    <!-- Featured promotion -->
-    <section v-if="promotions && promotions.length" class="w-full mx-auto p-4 md:p-8">
-      <h2 class="text-4xl font-bold text-gray-900 mb-10 pb-3">Featured Deals</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <productPromotion
-          v-for="promotion in promotions"
-          :key="promotion.id"
-          :title="promotion.title"
-          :image="promotion.image"
-          :color="promotion.color || promotion.color_hex"
-          :buttonColor="promotion.buttonColor || promotion.button_color_hex"
-          :url="promotion.url"
-        />
+      <div class="flex justify-center items-center w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <productPromotion
+            v-for="promotion in storePromotions"
+            :key="promotion.id"
+            :title="promotion.title"
+            :image="promotion.image"
+            :color="promotion.color || promotion.color_hex"
+            :buttonColor="promotion.buttonColor || promotion.button_color_hex"
+            :url="promotion.url"
+          />
+        </div>
       </div>
     </section>
-  </main>
+
+    <section class="w-full mx-auto md:p-8">
+      <MenuBar
+        NameMenu="Popular Products"
+        :groups="storeGroups"
+        @group-selected="currentGroupName = $event"
+        class="mb-12"
+      />
+    </section>
+  </div>
 </template>
 
 <script>
+import MenuBar from '@/components/MenuBar.vue'
 import { mapState } from 'pinia'
-import { useProductStore } from '@/stores/productStore.vue'
+import { useProductStore } from '@/stores/productStore'
 import productCard from '@/components/productCard.vue'
 import productPromotion from '@/components/productPromotion.vue'
 export default {
   name: 'HomeView',
-  components: { productCard, productPromotion },
+  components: { MenuBar, productCard, productPromotion },
   data() {
     return { currentGroupName: 'Group All' }
   },
   computed: {
     ...mapState(useProductStore, {
-      // promotions (no params)
-      promotions: 'getPromotions',
-
-      // categories by group
+      storeGroups: 'getGroups',
+      storePromotions: 'getPromotions',
       categoryList(store) {
         return store.getCategoriesByGroup(this.currentGroupName)
       },
     }),
   },
   props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
-    promotions: {
-      type: Array,
-      required: true,
-    },
+    groups: Array,
+    categories: Array,
+    promotions: Array,
+  },
+  created() {
+    const store = useProductStore()
+    store.setGroups(this.groups)
+    store.setCategories(this.categories)
+    store.setPromotions(this.promotions)
+
+    console.log('HomeView loaded props:', {
+      groups: this.groups,
+      categories: this.categories,
+      promotions: this.promotions,
+    })
   },
 }
 </script>
