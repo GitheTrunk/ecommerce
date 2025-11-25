@@ -1,51 +1,35 @@
 import { defineStore } from 'pinia'
+import { api } from '@/services/api'
 
-export const useProductStore = defineStore('product', {
+export const useProductStore = defineStore('productStore', {
   state: () => ({
     groups: [],
-    products: [],
-    promotions: [],
     categories: [],
+    promotions: [],
   }),
 
   getters: {
     getGroups: (state) => state.groups,
-
     getPromotions: (state) => state.promotions,
-
-    getCategoriesByGroup: (state) => {
-      return (groupName) =>
-        groupName === 'Group All'
-          ? state.categories
-          : state.categories.filter((c) => c.group === groupName)
+    getCategoriesByGroup: (state) => (groupName) => {
+      if (groupName === 'Group All') return state.categories
+      return state.categories.filter(
+        (c) => c.group && c.group.toLowerCase().trim() === groupName.toLowerCase().trim(),
+      )
     },
-
-    getProductsByGroup: (state) => {
-      return (groupName) =>
-        groupName === 'Group All'
-          ? state.products
-          : state.products.filter((p) => p.group === groupName)
-    },
-
-    getProductById: (state) => {
-      return (id) => state.products.find((p) => p.id === id)
-    },
-
-    getPopularProducts: (state) => state.products.filter((p) => p.countId > 10),
   },
 
   actions: {
-    setCategories(categories) {
-      this.categories = categories
-    },
-    setProducts(products) {
-      this.products = products
-    },
-    setPromotions(promotions) {
-      this.promotions = promotions
-    },
-    setGroups(groups) {
-      this.groups = groups
+    async loadAll() {
+      const [g, c, p] = await Promise.all([
+        api.getGroups(),
+        api.getCategories(),
+        api.getPromotions(),
+      ])
+
+      this.groups = g.data
+      this.categories = c.data
+      this.promotions = p.data
     },
   },
 })
