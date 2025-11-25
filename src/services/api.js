@@ -12,4 +12,7 @@ export const api = {
   getPromotions() {
     return axios.get(`${BASE_URL}/promotions`)
   },
+  getProductSales() {
+    return axios.get(`${BASE_URL}/products`)
+  },
 }
