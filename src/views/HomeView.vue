@@ -51,12 +51,12 @@
             v-for="product in storeProductSale"
             :key="product.id"
             :productImage="product.image"
-            :promotionNumber="product.promotionNumber"
+            :productRating="product.rating"
             :brand="product.brand"
             :description="product.name"
             :weight="product.size"
-            :price="product.price"
-            :originalPrice="product.originalPrice"
+            :discountPrice="product.promotionAsPercentage"
+            :originalPrice="product.price"
             :bgpromotion="product.bgpromotion"
           />
         </div>

@@ -7,11 +7,11 @@
       class="relative h-48 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white"
     >
       <div
-        v-if="promotionNumber"
-        class="absolute top-4 left-4 text-white text-sm font-bold px-4 py-1.5 rounded-full"
+        v-if="productRating"
+        class="absolute top-3 left-3 text-white text-sm font-bold px-4 py-1.5 rounded-r-2xl"
         :style="{ backgroundColor: bgpromotion || '#FF6F61' }"
       >
-        {{ promotionNumber }}
+        {{ productRating }}
       </div>
 
       <!-- Image Container -->
@@ -40,7 +40,7 @@
 
     <!-- Content Section -->
     <div class="p-4 space-y-3">
-      <p class="text-xs text-gray-500 font-medium">{{ brand || 'Hodo Foods' }}</p>
+      <p class="text-xs text-gray-500 font-medium">{{ brand ?? 'Hodo Foods' }}</p>
       <p class="text-sm font-semibold text-gray-900 line-clamp-2">{{ description }}</p>
 
       <!-- Star Rating -->
@@ -87,7 +87,7 @@
 
       <div class="w-full flex items-center justify-between">
         <div class="flex items-baseline gap-2">
-          <span class="text-xl font-bold text-green-600">${{ price }}</span>
+          <span class="text-xl font-bold text-green-600">${{ discountPrice }}</span>
           <span class="text-sm text-gray-400 line-through">${{ originalPrice }}</span>
         </div>
 
@@ -99,20 +99,15 @@
           >
             Add +
           </button>
-          <div v-else class="flex items-center justify-evenly gap-2">
-            <button
-              @click="decreaseQty"
-              class="flex-1 border border-gray-300 text-gray-700 py-1.5 rounded-lg hover:bg-gray-50 transition"
-            >
-              −
-            </button>
-            <span class="flex-1 text-center font-semibold text-gray-900">{{ qty }}</span>
-            <button
-              @click="increaseQty"
-              class="flex-1 border border-gray-300 text-gray-700 py-1.5 rounded-lg hover:bg-gray-50 transition"
-            >
-              +
-            </button>
+          <div v-else class="flex items-center justify-center gap-3">
+            <input
+              type="number"
+              v-model.number="qty"
+              min="1"
+              @blur="checkQty"
+              class="w-20 text-center border border-gray-300 rounded-lg py-1.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <button @click="resetQty" class="text-red-500 hover:text-red-700 font-bold">×</button>
           </div>
         </div>
       </div>
@@ -125,11 +120,11 @@ export default {
   name: 'ProductSale',
   props: {
     productImage: String,
-    promotionNumber: [String, Number],
+    productRating: [String, Number],
     brand: String,
     description: String,
     weight: [String, Number],
-    price: [String, Number],
+    discountPrice: [String, Number],
     originalPrice: [String, Number],
     bgpromotion: String,
   },
@@ -165,15 +160,14 @@ export default {
       this.isQtyVisible = true
       this.handleQtyChange()
     },
-    increaseQty() {
-      this.qty++
-      this.handleQtyChange()
-    },
-    decreaseQty() {
-      if (this.qty > 1) {
-        this.qty--
-        this.handleQtyChange()
+    checkQty() {
+      if (!this.qty || this.qty < 1) {
+        this.resetQty()
       }
+    },
+    resetQty() {
+      this.qty = 1
+      this.isQtyVisible = false
     },
     handleQtyChange() {
       this.$emit('qty-changed', this.qty)
