@@ -6,6 +6,7 @@
       </div>
 
       <div v-else>
+        <ShowCase />
         <MenuBar
           NameMenu="Featured Categories"
           :groups="storeGroups"
@@ -70,13 +71,14 @@ import MenuBar from '@/components/MenuBar.vue'
 import productCard from '@/components/productCard.vue'
 import productPromotion from '@/components/productPromotion.vue'
 import productSale from '@/components/productSale.vue'
+import ShowCase from '@/components/ShowCase.vue'
 import { useProductStore } from '@/stores/productStore'
 import { mapState } from 'pinia'
 
 export default {
   name: 'HomeView',
 
-  components: { MenuBar, productCard, productPromotion, productSale },
+  components: { MenuBar, productCard, productPromotion, productSale, ShowCase },
 
   data() {
     return {
