@@ -2,6 +2,7 @@
   <div
     class="w-40 h-56 shadow-lg rounded-xl overflow-hidden transform hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 cursor-pointer"
     :style="{ color, backgroundColor: color || '#FFFFFF' }"
+    @click="goToCategory"
   >
     <img
       :src="getFullImageUrl(imageSource)"
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 const FALLBACK_IMAGE = '@/assets/imgs/default.png'
 
 export default {
@@ -26,6 +28,20 @@ export default {
     image: { type: String, required: true },
     productCount: { type: [String, Number], required: true },
     color: { type: String, default: 'bg-white' },
+    categoryId: { type: [String, Number], required: true },
+  },
+  setup(props) {
+    const router = useRouter()
+
+    const goToCategory = () => {
+      router.push({
+        name: 'category',
+        params: { categoryId: props.categoryId },
+      })
+    }
+    return {
+      goToCategory,
+    }
   },
   data() {
     return {

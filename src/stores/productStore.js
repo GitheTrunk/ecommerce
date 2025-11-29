@@ -13,6 +13,7 @@ export const useProductStore = defineStore('productStore', {
     getGroups: (state) => state.groups,
     getPromotions: (state) => state.promotions,
     getProductSales: (state) => state.products,
+    getCategories: (state) => state.categories,
     getCategoriesByGroup: (state) => (groupName) => {
       if (groupName === 'Group All') return state.categories
       return state.categories.filter(

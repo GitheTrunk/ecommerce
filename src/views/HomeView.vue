@@ -16,11 +16,12 @@
 
         <div class="flex overflow-x-auto space-x-4 pb-2 mb-10">
           <productCard
-            v-for="category in categoryList"
+            v-for="category in storeCategories"
             :key="category.id"
             :name="category.name"
             :image="category.image"
             :productCount="category.productCount"
+            :categoryId="category.id"
             :color="category.color || category.color_hex"
             class="transform transition duration-300 ease-in-out hover:scale-[1.03] hover:shadow-xl"
           />
@@ -92,9 +93,7 @@ export default {
       storeGroups: 'getGroups',
       storePromotions: 'getPromotions',
       storeProductSale: 'getProductSales',
-      categoryList(store) {
-        return store.categories
-      },
+      storeCategories: 'getCategories',
     }),
   },
 
