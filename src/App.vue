@@ -1,9 +1,13 @@
-<script setup lang="ts"></script>
-
 <template>
-  <header>
-    <!-- <p>Nav</p> -->
-  </header>
-
-  <RouterView></RouterView>
+  <MainLayout>
+    <router-view />
+  </MainLayout>
 </template>
+
+<script>
+import MainLayout from '@/layouts/MainLayout.vue'
+
+export default {
+  components: { MainLayout },
+}
+</script>
